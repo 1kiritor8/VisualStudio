@@ -35,7 +35,7 @@ void SeqListCheckCapacity(SL* ps) {
 //销毁
 void SeqListDestory(SL* ps) {
 	free(ps->a);
-	ps->a == NULL;
+	ps->a = NULL;
 	ps->size = 0;
 	ps->capacity = 0;
 }
@@ -88,18 +88,42 @@ void SeqListPopFront(SL* ps) {
 
 //查找数据，找到了返回下表，没有找到返回-1
 int SeqListFind(SL* ps, SLDataType x) {
-	assert(ps->size >= 0);
+	for (int i = 0; i < ps->size; i++) {
+		if (ps->a[i] == x) {
+			return i;
+		}
+	}
 
-
+	return -1;
 
 }
 
 //在特定位置插入数据
 void SeqListInsert(SL* ps, int pos, SLDataType x) {
+	assert(pos >= 0 && pos <= ps->size);
+
+	SeqListCheckCapacity(ps);
+	int end = ps->size - 1;
+	//挪动数据
+	while (end >= pos) {
+		ps->a[end + 1] = ps->a[end];
+		--end;
+	}
+
+	ps->a[pos] = x;
+	ps->size++;
 
 }
 
 //在特定位置删除数据
 void SeqListErase(SL* ps, int pos) {
+	assert(pos >= 0 && pos < ps->size);
 
+	int begin = pos + 1;
+	while(begin < ps->size) {
+		ps->a[begin - 1] = ps->a[begin];
+		++begin;
+	}
+
+	ps->size--;
 }
